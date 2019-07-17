@@ -35,3 +35,12 @@ $max-height: $vs-dropdown-max-height;
 .vs__no-options {
   text-align: center;
 }
+
+.vs__dropdown-menu li.disabled:hover {
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.vs__dropdown-menu li > a.disabled {
+  color: #999;
+}

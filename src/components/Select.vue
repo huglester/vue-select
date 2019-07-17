@@ -57,9 +57,9 @@
           v-for="(option, index) in filteredOptions"
           :key="index"
           class="vs__dropdown-option"
-          :class="{ 'vs__dropdown-option--selected': isOptionSelected(option), 'vs__dropdown-option--highlight': index === typeAheadPointer }"
-          @mouseover="typeAheadPointer = index"
-          @mousedown.prevent.stop="select(option)"
+          :class="{ 'vs__dropdown-option--selected': isOptionSelected(option), 'vs__dropdown-option--highlight': index === typeAheadPointer, disabled: isOptionDisabled(option) }"
+          @mouseover="isOptionDisabled(option)?()=>{}:typeAheadPointer = index"
+          @mousedown.prevent.stop="select(option)" :class="{disabled: isOptionDisabled(option)}"
         >
           <slot name="option" v-bind="normalizeOptionForSlot(option)">
             {{ getOptionLabel(option) }}
@@ -478,6 +478,9 @@
        * @return {void}
        */
       select(option) {
+        if (option === null || option === undefined || this.isOptionDisabled(option)) {
+          return;
+        }
         if (!this.isOptionSelected(option)) {
           if (this.taggable && !this.optionExists(option)) {
             option = this.createOption(option)
@@ -807,7 +810,10 @@
             e.preventDefault();
             return this.typeAheadSelect();
         }
-      }
+      },
+      isOptionDisabled(option) {
+        return !!option.disabled;
+      },
     },
 
     computed: {
